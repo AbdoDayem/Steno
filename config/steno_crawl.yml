@@ -1,0 +1,38 @@
+# This is a sample config file for crawling the parksaustralia.gov.au website writing output to an ES index
+#
+# The configuration options in this example are not exhaustive. To see all possible configuration options,
+# reference the config templates:
+# - config/crawler.yml.example
+# - config/elasticsearch.yml.example
+
+# Domains allowed for the crawl
+domains:
+  - url: https://elastic.co
+
+# Where to send the results. Possible values are console, file, or elasticsearch
+output_sink: console
+
+# Elasticsearch index name to ingest crawl results into. Required if output_sink is elasticsearch
+output_index: crawl_index
+
+
+# Crawl tuning
+max_crawl_depth: 1
+
+# Crawl result field size limits
+max_title_size: 500
+max_body_size: 5_242_880 # 5 megabytes
+max_keywords_size: 512
+max_description_size: 512
+max_indexed_links_count: 5
+max_headings_count: 5
+
+# Only neccesary if your output_sink is = elasticsearch
+elasticsearch:
+  host: http://localhost
+  port: 9300
+  username: elastic
+  password:  # Fill in your password
+  bulk_api:
+    max_items: 10
+    max_size_bytes: 1_048_576
