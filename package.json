@@ -4,7 +4,7 @@
   "description": "Our capstone project yay",
   "main": "index.js",
   "scripts": {
-    "build": "postcss css/styles.css -o build/postProcessing.css",
+    "build": "postcss ./css/preProcessing.css -o ./popup/postProcessing.css",
     "watch": "watch \"npm run build\""
   },
   "keywords": [],
