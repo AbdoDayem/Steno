@@ -7,6 +7,7 @@ dw.set_path("sample_audio")
 
 dw.add_audio("rockdj.mp3")
 dw.add_audio("sample_speech.mp3")
+dw.add_audio("sample_speech2.mp3")
 
 # Run the main function asynchronously and wait for it to finish
 async def run_transcription():
