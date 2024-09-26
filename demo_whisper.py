@@ -23,7 +23,7 @@ def set_path(path):
     PATH = path
 
 def transcribe(model, file):
-    return model.transcribe(file, fp16=False)['text']
+    return model.transcribe(file)['text']
 
 def load_model():
     return whisper.load_model("base")
