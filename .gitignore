@@ -1,7 +1,4 @@
-http_ca.crt
-
-node_modules
-
-.DS_Store
-
-Dockerfile
+extension/http_ca.crt
+extension/node_modules
+extension/.DS_Store
+extension/Dockerfile
