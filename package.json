@@ -1,0 +1,24 @@
+{
+  "name": "capstone",
+  "version": "1.0.0",
+  "description": "Our capstone project yay",
+  "main": "index.js",
+  "scripts": {
+    "build": "postcss ./css/preProcessing.css -o ./popup/postProcessing.css",
+    "watch": "watch \"npm run build\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.15.0",
+    "autoprefixer": "^10.4.20",
+    "cli": "^1.0.1",
+    "postcss": "^8.4.45",
+    "postcss-cli": "^11.0.0",
+    "watch": "^1.0.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.10"
+  }
+}
