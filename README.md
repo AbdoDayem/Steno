@@ -1,2 +1,3 @@
-# capstone
-Our capstone project yay
+# CAPSTONE
+
+yay

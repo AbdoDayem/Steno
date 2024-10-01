@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* NOTE: we could potentially download a min version of tailwind and directly include that in the html source */
+
+#transcribe {
+    width: 160px;
+}
