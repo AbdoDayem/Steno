@@ -15,10 +15,9 @@ def home():
 def url():
     global URL
     if request.method=='POST':
-        URL = str(request.data)
+        URL = request.data.decode("UTF-8")
     else:
         return URL
-
 
 @app.route('/transcribe', methods=['POST'])
 def receive_transcription():
