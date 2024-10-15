@@ -19,17 +19,11 @@ def url():
     global URL
 
     if request.method=='POST':
-        URL = request.data.decode("UTF-8")
-        print(request.data)
-        return 200, 'URL posted to backend'
-
-        # data = request.get_json()
-        # url = request.headers.get('Origin')
-        # print(data)
-        # print(url)
-        # return 200, url
+        data = request.get_json()
+        URL = data.get('url')
+        return 'URL posted to backend', 200
     else:
-        return 200, URL
+        return URL, 200
 
 @app.route('/transcribe', methods=['POST'])
 def receive_transcription():
@@ -44,7 +38,7 @@ def receive_transcription():
 @app.route('/status', methods=['GET'])
 def audios_left():
     global N
-    return str(N)
+    return str(N), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -23,18 +23,9 @@ const startTranscription = async (data) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        mode: 'no-cors',
         body: JSON.stringify(data)
     }
 
-    const resp = await fetch('http://localhost:5000/url', OPTIONS)
-        // .then(res => res.json())
-        // .then(data => data);
+    const resp = await fetch('http://127.0.0.1:5000/url', OPTIONS)
         .then(res => res);
-
-    console.log(resp);
-
-    // Example number of transcriptions
-    // TODOR: replace this with 'resp' and have the request send back a number
-    return 111;
 }
