@@ -30,12 +30,28 @@ const sendURL = async () => {
     const url = await getURL();
 
     // Send the URL to the background script
-    chrome.runtime.sendMessage({
-        "event": "transcribe",
-        "prefs": {
-            "url": url
+    const resp = await chrome.runtime.sendMessage(
+        // The JSON we send to the background script
+        {
+            "event": "transcribe",
+            "prefs": {
+                "url": url
+            }
+        },
+        // The callback function
+        (response) => {
+            if (chrome.runtime.lastError) {
+                console.error(JSON.stringify(chrome.runtime.lastError));
+            }
+
+            if (response) {
+                console.log(response);
+                return response;
+            }
         }
-    });
+    );
+
+    console.log(resp);
 };
 
 // Obtain the user's active tab
