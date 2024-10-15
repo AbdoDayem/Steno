@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import ast
+
 app = Flask(__name__)
 CORS(app)
 
@@ -15,10 +17,23 @@ def home():
 @app.route('/url',methods=['POST','GET'])
 def url():
     global URL
+    data = request.get_json()
+    url = request.headers.get('Origin')
+    print(data)
+    print(url)
+
     if request.method=='POST':
         URL = request.data.decode("UTF-8")
+        print(request.data)
+        # return 200, 'URL posted to backend'
+
+        data = request.get_json()
+        url = request.headers.get('Origin')
+        print(data)
+        print(url)
+        return 200, url
     else:
-        return URL
+        return 200, URL
 
 @app.route('/transcribe', methods=['POST'])
 def receive_transcription():
@@ -35,21 +50,5 @@ def audios_left():
     global N
     return str(N)
 
-@app.route('/api/v1/transcribe', methods=['POST'])
-def startTranscriptions():
-    data = request.get_json()
-    url = request.headers.get('Origin')
-    print(data)
-    print(url)
-    return jsonify(data), 200
-
-@app.route('/api/v1/transcriptions', methods=['GET'])
-def getTranscriptions():
-    return 404
-
-@app.route('/api/v1/stop', methods=['GET'])
-def stopTranscription():
-    return 404
-
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True)
