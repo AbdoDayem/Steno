@@ -45,13 +45,10 @@ const sendURL = async () => {
             }
 
             if (response) {
-                console.log(response);
                 return response;
             }
         }
     );
-
-    console.log(resp);
 };
 
 // Obtain the user's active tab

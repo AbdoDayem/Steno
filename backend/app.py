@@ -17,21 +17,17 @@ def home():
 @app.route('/url',methods=['POST','GET'])
 def url():
     global URL
-    data = request.get_json()
-    url = request.headers.get('Origin')
-    print(data)
-    print(url)
 
     if request.method=='POST':
         URL = request.data.decode("UTF-8")
         print(request.data)
-        # return 200, 'URL posted to backend'
+        return 200, 'URL posted to backend'
 
-        data = request.get_json()
-        url = request.headers.get('Origin')
-        print(data)
-        print(url)
-        return 200, url
+        # data = request.get_json()
+        # url = request.headers.get('Origin')
+        # print(data)
+        # print(url)
+        # return 200, url
     else:
         return 200, URL
 
