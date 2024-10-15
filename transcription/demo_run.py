@@ -1,19 +1,30 @@
-import os
-import time
 import demo_whisper as dw
 import asyncio
+import requests
+from os import listdir
+from os.path import isfile, join
 
-dw.set_path("sample_audio")
+PATH = 'sample_audio'
 
-dw.add_audio("rockdj.mp3")
-dw.add_audio("sample_speech.mp3")
-dw.add_audio("sample_speech2.mp3")
+def add_audios():
+    for f in listdir(PATH):
+        if isfile(join(PATH, f)):
+            dw.add_audio(f)
 
 # Run the main function asynchronously and wait for it to finish
 async def run_transcription():
-    await dw.main()
+    return await dw.main()
 
 async def main():
+    #wait for audios to be ready
+    ready = False
+    while not ready:
+        await asyncio.sleep(1)
+        r = requests.get('http://localhost:5000/audio')
+        ready = r.content.decode("UTF-8") == 'True'
+    
+    dw.set_path(PATH)
+    add_audios()
     task = asyncio.create_task(run_transcription())
     await asyncio.sleep(5)  # Wait for a while before killing
     await dw.kill()  # Call the kill function
