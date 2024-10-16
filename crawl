@@ -23,4 +23,6 @@ sed -i -e "s@$SEARCH_SEED@$REPLACE_SEED@g" $CONFIG_PATH
 
 docker cp $CONFIG_PATH crawler:app/config/crawler.yml
 
-docker exec -it crawler bin/crawler crawl ./config/crawler.yml
+docker exec -it crawler bin/crawler crawl ./config/crawler.yml > html.txt
+
+python3 ./download.py
