@@ -1,0 +1,36 @@
+# Url and seed_url should be substituted when running crawl for a specific page
+# API_KEY variable will be replaced on startup
+
+# Domains allowed for the crawl
+domains:
+  - url: https://en.wikipedia.org
+    seed_urls: [https://en.wikipedia.org/wiki/File:Spoken_Wikipedia_-_One_Times_Square.ogg]
+    
+# Where to send the results. Possible values are console, file, or elasticsearch
+output_sink: console
+
+# Elasticsearch index name to ingest crawl results into. Required if output_sink is elasticsearch
+output_index: crawl-index 
+
+# Crawl tuning
+# Will index the base url and the seed url pages currently
+max_crawl_depth: 1  # Will follow 1 link deep (will not index seed url at 0)
+max_indexed_links_count: 0 # Don't follow links
+
+# Crawl result field size limits
+max_title_size: 500
+max_body_size: 5_242_880 # 5 megabytes
+max_keywords_size: 512
+max_description_size: 512
+max_headings_count: 5
+
+# Only necessary if outpout_sink = elasticsearch
+elasticsearch:
+  host: https://es01
+  port: 9200
+  api_key: SzB3cW01SUIwcXZoZ2NrczJERzY6bEZqYlBPS21ROWVGLUJSZTNCYTZsZw== 
+  ca_fingerprint: 0054665FC7705177917F09DCB84C3DF4326C10925B8C3C2607F42A9DE055A428 
+  bulk_api:
+    max_items: 10
+    max_size_bytes: 1_048_576
+# THIS FILE IS GENERATED; DO NOT EDIT IF YOU WANT THIS CHANGE TO PERSIST
