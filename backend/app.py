@@ -1,15 +1,19 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 import ast
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 DATA = "Hello, world"
-N = 0
+N = 10
 TEXT = {}
 URL = ""
 AUDIO_READY = False
 
 # Extension gets transcription json
 @app.route('/', methods=['GET'])
+@cross_origin
 def home():
     global TEXT
     return jsonify(TEXT)
