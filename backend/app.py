@@ -9,6 +9,8 @@ DATA = "Hello, world"
 N = 10
 TEXT = {}
 URL = ""
+AUDIO_READY = False
+
 @app.route('/', methods=['GET'])
 @cross_origin
 def home():
@@ -37,6 +39,15 @@ def receive_transcription():
 def audios_left():
     global N
     return str(N)
+
+# Let's transcription know when folder has been populated with audio
+@app.route('/audio',methods=['GET','POST'])
+def ready():
+    global AUDIO_READY
+    if request.method=='POST':
+        AUDIO_READY = True
+    else:
+        return str(AUDIO_READY)
 
 if __name__ == '__main__':
     app.run(debug=True)

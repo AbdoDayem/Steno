@@ -45,8 +45,6 @@ async def run(model):
         elif kill_flag:
             print('Stopping transcription.')
             break
-    
-    print(f'Transcription results: {D}')
     return D
 
 def add_audio(audio_file):
