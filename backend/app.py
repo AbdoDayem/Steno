@@ -8,11 +8,13 @@ TEXT = {}
 URL = ""
 AUDIO_READY = False
 
+# Extension gets transcription json
 @app.route('/', methods=['GET'])
 def home():
     global TEXT
     return jsonify(TEXT)
 
+# Communicates the URL
 @app.route('/url',methods=['POST','GET'])
 def url():
     global URL
@@ -21,6 +23,7 @@ def url():
     else:
         return URL
 
+# Transcription sends python dict of transcription
 @app.route('/transcribe', methods=['POST'])
 def receive_transcription():
     global TEXT
@@ -31,8 +34,9 @@ def receive_transcription():
     dict_str = data.decode("UTF-8")
     TEXT = ast.literal_eval(dict_str)
 
+# Checks how many audios have been decoded so far
 @app.route('/status', methods=['GET'])
-def audios_left():
+def audios_transcribed():
     global N
     return str(N)
 
