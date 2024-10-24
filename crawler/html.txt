@@ -1,7 +1,7 @@
-[crawl:6711329d47d5faaeae079037] [primary] Initialized an in-memory URL queue for up to 10000 URLs
-[crawl:6711329d47d5faaeae079037] [primary] Starting the primary crawl with up to 10 parallel thread(s)...
-[crawl:6711329d47d5faaeae079037] [primary] Crawl status: queue_size=0, pages_visited=1, urls_allowed=1, urls_denied={}, crawl_duration_msec=600, crawling_time_msec=345.0, avg_response_time_msec=345.0, active_threads=1, http_client={:max_connections=>100, :used_connections=>1}, status_codes={"200"=>1}
-# 6711329e47d5fa05eb079040, https://en.wikipedia.org/wiki/File:Spoken_Wikipedia_-_One_Times_Square.ogg, 200
+[crawl:671157fe47d5faf4272ba95c] [primary] Initialized an in-memory URL queue for up to 10000 URLs
+[crawl:671157fe47d5faf4272ba95c] [primary] Starting the primary crawl with up to 10 parallel thread(s)...
+[crawl:671157fe47d5faf4272ba95c] [primary] Crawl status: queue_size=0, pages_visited=1, urls_allowed=1, urls_denied={}, crawl_duration_msec=583, crawling_time_msec=316.0, avg_response_time_msec=316.0, active_threads=1, http_client={:max_connections=>100, :used_connections=>1}, status_codes={"200"=>1}
+# 671157ff47d5fa7ab62ba965, https://en.wikipedia.org/wiki/File:Spoken_Wikipedia_-_One_Times_Square.ogg, 200
 <!DOCTYPE html>
 <html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-page-header-disabled vector-feature-sticky-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref--excluded vector-feature-appearance-pinned-clientpref-1 vector-feature-night-mode-enabled skin-theme-clientpref-day vector-toc-not-available" lang="en" dir="ltr">
 <head>
@@ -651,11 +651,11 @@ If the file has been modified from its original state, some details may not full
 </div><script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgHostname":"mw-web.eqiad.main-954756bd5-686c8","wgBackendResponseTime":192,"wgPageParseReport":{"limitreport":{"cputime":"0.002","walltime":"0.002","ppvisitednodes":{"value":3,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":1,"limit":100},"expensivefunctioncount":{"value":0,"limit":500},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"entityaccesscount":{"value":0,"limit":400},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"origin":"mw-web.eqiad.main-954756bd5-686c8","timestamp":"20241017154231","ttl":2592000,"transientcontent":false}}});});</script>
 </body>
 </html>
-[crawl:6711329d47d5faaeae079037] [primary] Crawl queue is empty, finishing the primary crawl
-[crawl:6711329d47d5faaeae079037] [primary] Finished a crawl stage. Result: success; Successfully finished the primary crawl with an empty crawl queue
-[crawl:6711329d47d5faaeae079037] [primary] Purge crawls are not supported for sink type console. Skipping purge crawl.
-[crawl:6711329d47d5faaeae079037] [primary] Closing the output sink before finishing the crawl...
-[crawl:6711329d47d5faaeae079037] [primary] Crawl status: queue_size=0, pages_visited=2, urls_allowed=1, urls_denied={:domain_filter_denied=>22, :nofollow=>2, :link_too_deep=>17, :robots_txt_disallowed=>23, :incorrect_protocol=>1}, crawl_duration_msec=1453, crawling_time_msec=397.0, avg_response_time_msec=198.5, active_threads=0, http_client={:max_connections=>100, :used_connections=>1}, status_codes={"200"=>2}
-[crawl:6711329d47d5faaeae079037] [primary] Crawl shutdown complete
-[crawl:6711329d47d5faaeae079037] [primary] Finished a crawl. Result: success; Successfully finished the primary crawl with an empty crawl queue
-[crawl:6711329d47d5faaeae079037] [primary] Releasing resources used by the crawl...
+[crawl:671157fe47d5faf4272ba95c] [primary] Crawl queue is empty, finishing the primary crawl
+[crawl:671157fe47d5faf4272ba95c] [primary] Finished a crawl stage. Result: success; Successfully finished the primary crawl with an empty crawl queue
+[crawl:671157fe47d5faf4272ba95c] [primary] Purge crawls are not supported for sink type console. Skipping purge crawl.
+[crawl:671157fe47d5faf4272ba95c] [primary] Closing the output sink before finishing the crawl...
+[crawl:671157fe47d5faf4272ba95c] [primary] Crawl status: queue_size=0, pages_visited=2, urls_allowed=1, urls_denied={:domain_filter_denied=>22, :nofollow=>2, :link_too_deep=>17, :robots_txt_disallowed=>23, :incorrect_protocol=>1}, crawl_duration_msec=1470, crawling_time_msec=362.0, avg_response_time_msec=181.0, active_threads=0, http_client={:max_connections=>100, :used_connections=>1}, status_codes={"200"=>2}
+[crawl:671157fe47d5faf4272ba95c] [primary] Crawl shutdown complete
+[crawl:671157fe47d5faf4272ba95c] [primary] Finished a crawl. Result: success; Successfully finished the primary crawl with an empty crawl queue
+[crawl:671157fe47d5faf4272ba95c] [primary] Releasing resources used by the crawl...
