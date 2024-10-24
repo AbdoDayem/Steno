@@ -95,7 +95,7 @@ services:
 
   python_process:
     build:
-      context: ./script4
+      context: ./start.py
       dockerfile: Dockerfile
     image: python-process-image
     container_name: python_process_container
