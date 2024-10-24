@@ -1,5 +1,6 @@
 import urllib.request as urlReq
 import requests
+import elasticsearch as es
 
 def HtmlAcquisition(url: str):
 
@@ -15,7 +16,12 @@ def HtmlAcquisition(url: str):
     pageAccess2.text
     #requires RFC2616
 
-def ElasticSearch():
+    ElasticSearch()
+
+def ElasticSearch(url: str, html: str):
+    esClient = es('https://localhost:9200', api_key='certs/ca-cert.pem') #add password
+    esClient.indicies.create(url)
+    
     print('not yet implemented')
 
 def FileDownload():
