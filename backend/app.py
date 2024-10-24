@@ -21,7 +21,7 @@ def url():
     if request.method=='POST':
         data = request.get_json()
         URL = data.get('url')
-        return 'URL posted to backend', 200
+        return jsonify(URL), 200
     else:
         return URL, 200
 
@@ -38,7 +38,7 @@ def receive_transcription():
 @app.route('/status', methods=['GET'])
 def audios_left():
     global N
-    return str(N), 200
+    return jsonify(N), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
