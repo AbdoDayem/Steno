@@ -1,29 +1,25 @@
-import urllib.request as urlReq
 import requests
-import elasticsearch as es
+from elasticsearch import Elasticsearch
+import json
+
 
 def HtmlAcquisition(url: str):
 
-    #urllib
-    pageAccess = urlReq.urlopen(url)
-    pageBytes = pageAccess.read()
-    pageHtml = pageBytes.decode("utf8")
-    pageAccess.close()
-
-    #requests
-    pageAccess2 = requests.get(url)
+    #request for HTML
+    pageAccess = requests.get(url)
+    pageHtml = pageAccess.text
     
-    pageAccess2.text
-    #requires RFC2616
-
-    ElasticSearch()
+    ElasticSearch(url, pageHtml)
 
 def ElasticSearch(url: str, html: str):
-    esClient = es('https://localhost:9200', api_key='certs/ca-cert.pem') #add password
-    esClient.indicies.create(url)
     
-    print('not yet implemented')
+    esClient = Elasticsearch("https://localhost:9200", ca_certs="certs/ca-cert.pem", basic_auth=("elastic", "Pk507wI0KzaZ"))
+    esClient.create(index=url, id=url, document={'body': html})
+    
+
 
 def FileDownload():
     print('not yet implemented')
 
+testURL = 'https://en.wikipedia.org/wiki/File:01_-_Vivaldi_Spring_mvt_1_Allegro_-_John_Harrison_violin.ogg'
+HtmlAcquisition(testURL)
