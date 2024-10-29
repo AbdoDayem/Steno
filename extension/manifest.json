@@ -11,7 +11,7 @@
     "storage"
   ],
   "icons": {
-    "16": "icons/icon.png"
+    "16": "icons/Logo.png"
   },
   "background": {
     "service_worker": "background.js",

@@ -56,14 +56,5 @@ def ready():
     else:
         return jsonify(AUDIO_READY), 200
 
-# Let's transcription know when folder has been populated with audio
-@app.route('/audio',methods=['GET','POST'])
-def ready():
-    global AUDIO_READY
-    if request.method=='POST':
-        AUDIO_READY = True
-    else:
-        return str(AUDIO_READY)
-
 if __name__ == '__main__':
     app.run(debug=True)
