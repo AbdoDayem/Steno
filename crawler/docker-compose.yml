@@ -1,5 +1,4 @@
 services:
-
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     container_name: es01
@@ -26,23 +25,22 @@ services:
       - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch-cert.pem
       - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca-cert.pem
 
-
       # Security
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - xpack.security.http.ssl.keystore.password=${ELASTIC_PASSWORD}
       - xpack.security.authc.api_key.enabled=true
 
-    mem_limit: ${ES_MEM_LIMIT}  
+    mem_limit: ${ES_MEM_LIMIT}
     healthcheck:
       test: curl -s --cacert /usr/share/elasticsearch/config/certs/ca-cert.pem -u elastic:${ELASTIC_PASSWORD} https://localhost:9200/_cluster/health | grep -vq '"status":"red"'
       interval: 10s
       retries: 5
 
   api_key_creator:
-    image: alpine:latest 
+    image: alpine:latest
     depends_on:
       elasticsearch:
-          condition: service_healthy
+        condition: service_healthy
     command: >
       /bin/sh -c "
                 apk --no-cache add curl ca-certificates gettext;
@@ -78,7 +76,6 @@ services:
       - ./config:/config
       - ./crawl:/crawl
 
-  
   crawler:
     image: docker.elastic.co/integrations/crawler:${CRAWLER_VERSION}
     container_name: crawler
@@ -88,13 +85,22 @@ services:
       - ./certs:/usr/share/elasticsearch/config/certs
       - ./config:/config
     command: >
-     -c " 
-      echo 'Sleep to remain on standby'
-      sleep infinity
-      "
+      -c " 
+       echo 'Sleep to remain on standby'
+       sleep infinity
+       "
     depends_on:
       api_key_creator:
         condition: service_completed_successfully
+
+  python_process:
+    build:
+      context: ./start.py
+      dockerfile: Dockerfile
+    image: python-process-image
+    container_name: python_process_container
+    networks:
+      - elastic
 
 networks:
   elastic:

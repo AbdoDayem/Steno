@@ -26,5 +26,3 @@ docker cp $CONFIG_PATH crawler:app/config/crawler.yml
 docker exec -it crawler bin/crawler crawl config/crawler.yml > html.txt
 
 python3 ./download.py
-
-python3 ../transcription/demo_tb3.py

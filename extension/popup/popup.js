@@ -43,12 +43,41 @@ const sendURL = async () => {
     const url = await getURL();
 
     // Send the URL to the background script
-    chrome.runtime.sendMessage({
-        "event": "transcribe",
-        "prefs": {
-            "url": url
+    await chrome.runtime.sendMessage(
+        // The JSON we send to the background script
+        {
+            "event": "transcribe",
+            "prefs": {
+                "url": url
+            }
+        },
+        // The callback function
+        (response) => {
+            if (chrome.runtime.lastError) {
+                console.error(JSON.stringify(chrome.runtime.lastError));
+            }
+
+            // Display a message to the user that the transcription is beginning
+            if (response) {
+                p = document.createElement('p');
+                p.textContent = 'Transcribing audio on: ' + response;
+
+                const launchStatus = document.getElementById('launchStatus');
+
+                // Clear the previous content
+                launchStatus.innerHTML = '';
+
+                // Add the <p> to the content area in the HTML page
+                launchStatus.appendChild(p);
+                
+                // Display the transcription response area
+                launchStatus.classList.remove('hidden');
+                
+                // Trigger the next action - the polling function
+                pollForTranscription();
+            }
         }
-    });
+    );
 };
 
 // Display the number of remaining files to be transcribed using the backend endpoint /status
@@ -68,4 +97,51 @@ const getURL = async () => {
             resolve(tabs[0].url);
         });
     });
+};
+
+const pollForTranscription = async () => {
+    await chrome.runtime.sendMessage(
+        {
+            "event": "poll",
+        },
+        (response) => {
+            // console.log('response from pollForTranscription on popup.js');
+            // console.log(response);
+
+            // Trigger the next action - the transcription retrieval function
+            getTranscriptions();
+        }
+    );
+
+    // getTranscriptions();
+};
+
+const getTranscriptions = async () => {
+    await chrome.runtime.sendMessage(
+        {
+            "event": "transcriptions",
+        },
+        (response) => {
+            const transcriptionResponse = document.getElementById('transcriptionResponse');
+            transcriptionResponse.innerHTML = '';
+
+            // console.log('response from getTranscriptions on popup.js');
+            // console.log(typeof response);
+            // console.log(response);
+
+            // response should be an object of key-value pairs, where the values are the text i want to display to the user
+            Object.keys(response).forEach(key => {
+                p = document.createElement('p');
+                p.textContent = response[key];
+
+                transcriptionResponse.appendChild(p);
+            });
+            // response.forEach(transcription => {
+            //     p = document.createElement('p');
+            //     p.textContent = transcription;
+
+            //     transcriptionResponse.appendChild(p);
+            // });
+        }
+    );
 };

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import ast
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -19,22 +20,24 @@ def home():
     return jsonify(TEXT)
 
 # Communicates the URL
-@app.route('/url',methods=['POST','GET'])
+@app.route('/url', methods=['POST', 'GET'])
 def url():
     global URL
+
     if request.method=='POST':
-        URL = request.data.decode("UTF-8")
+        data = request.get_json()
+        URL = data.get('url')
+        return jsonify(URL), 200
     else:
-        return URL
+        return URL, 200
 
 # Transcription sends python dict of transcription
 @app.route('/transcribe', methods=['POST'])
 def receive_transcription():
     global TEXT
     global N
-    N = N+1
+    N = N + 1
     data = request.data
-    print(data)
     dict_str = data.decode("UTF-8")
     TEXT = ast.literal_eval(dict_str)
 
@@ -42,7 +45,16 @@ def receive_transcription():
 @app.route('/status', methods=['GET'])
 def audios_transcribed():
     global N
-    return str(N)
+    return jsonify(N), 200
+
+# Let's transcription know when folder has been populated with audio
+@app.route('/audio', methods=['GET', 'POST'])
+def ready():
+    global AUDIO_READY
+    if request.method=='POST':
+        AUDIO_READY = True
+    else:
+        return jsonify(AUDIO_READY), 200
 
 # Let's transcription know when folder has been populated with audio
 @app.route('/audio',methods=['GET','POST'])

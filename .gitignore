@@ -1,5 +1,10 @@
 .env
+
+# Extension
 extension/http_ca.crt
 extension/node_modules
 extension/.DS_Store
 extension/Dockerfile
+
+# Global
+.venv
