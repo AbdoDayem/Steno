@@ -1,0 +1,108 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: es01
+    networks:
+      - elastic
+    ports:
+      - ${ES_PORT}:9200
+    volumes:
+      - ./certs:/usr/share/elasticsearch/config/certs
+    environment:
+      - node.name=es01
+      - discovery.type=single-node
+
+      # HTTP SSL
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.verification_mode=certificate
+      - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/elasticsearch-key.pem
+      - xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca-cert.pem
+      - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch-cert.pem
+
+      # Transport SSL
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/elasticsearch-key.pem
+      - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch-cert.pem
+      - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca-cert.pem
+
+      # Security
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - xpack.security.http.ssl.keystore.password=${ELASTIC_PASSWORD}
+      - xpack.security.authc.api_key.enabled=true
+
+    mem_limit: ${ES_MEM_LIMIT}
+    healthcheck:
+      test: curl -s --cacert /usr/share/elasticsearch/config/certs/ca-cert.pem -u elastic:${ELASTIC_PASSWORD} https://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+      interval: 10s
+      retries: 5
+
+  api_key_creator:
+    image: alpine:latest
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    command: >
+      /bin/sh -c "
+                apk --no-cache add curl ca-certificates gettext;
+                echo 'Waiting for Elasticsearch to be ready...';
+                until curl -v -s -u elastic:${ELASTIC_PASSWORD} --cacert /usr/share/elasticsearch/config/certs/ca-cert.pem https://es01:9200/_cluster/health | grep -vq '\"status\":\"red\"'; do sleep 5; done;
+                echo 'Creating API key...';
+                curl -X POST -u elastic:${ELASTIC_PASSWORD} --cacert /usr/share/elasticsearch/config/certs/ca-cert.pem https://es01:9200/_security/api_key -H 'Content-Type: application/json' -d'
+                {
+                  \"name\": \"crawler_key\",
+                  \"expiration\": \"365d\",
+                  \"role_descriptors\": {
+                    \"crawler_role\": {
+                      \"cluster\": [\"all\"],
+                      \"indices\": [{
+                        \"names\": [\"*\"],
+                        \"privileges\": [\"all\"]
+                      }]
+                      }
+                  }
+                }' > /tmp/api_key.json;
+                echo 'API Key created and stored at /tmp/api_key.json';
+
+                echo 'Setting api-key in crawler config';
+                export API_KEY=$(grep 'encoded' /tmp/api_key.json | sed -n 's/.*\"encoded\":\s*\"\\([^\"]*\\)\".*/\\1/p')
+                envsubst < /config/steno_crawl_template.yml > /config/steno_crawl.yml
+                echo '# THIS FILE IS GENERATED; DO NOT EDIT IF YOU WANT THIS CHANGE TO PERSIST' >> /config/steno_crawl.yml
+                echo 'Api-key set for crawler'
+                "
+    networks:
+      - elastic
+    volumes:
+      - ./certs:/usr/share/elasticsearch/config/certs
+      - ./config:/config
+      - ./crawl:/crawl
+
+  crawler:
+    image: docker.elastic.co/integrations/crawler:${CRAWLER_VERSION}
+    container_name: crawler
+    networks:
+      - elastic
+    volumes:
+      - ./certs:/usr/share/elasticsearch/config/certs
+      - ./config:/config
+    command: >
+      -c " 
+       echo 'Sleep to remain on standby'
+       sleep infinity
+       "
+    depends_on:
+      api_key_creator:
+        condition: service_completed_successfully
+
+  python_process:
+    build:
+      context: ./start.py
+      dockerfile: Dockerfile
+    image: python-process-image
+    container_name: python_process_container
+    networks:
+      - elastic
+
+networks:
+  elastic:
+    # Used to connect between elasticsearch and crawler
+    driver: bridge
