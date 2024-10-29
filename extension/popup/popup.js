@@ -18,20 +18,11 @@ const $transcribeButton = document.getElementById("transcribe")
 
 // Listen to any clicking that happen to the button and if so, transcribe
 $transcribeButton.addEventListener("click", () => {
-    // if (document.getElementById('transcriptionResponse').children.length === 0) {
-        // p = document.createElement('p');
-        // // This is a placeholder API
-        // fetch("https://catfact.ninja/fact")
-        // .then(response => response.json())
-        // .then(data => {
-        //     p.textContent = data["fact"]
-        // })
-        // // Add the <p> to the content area in the HTML page
-        // document.getElementById('transcriptionResponse').appendChild(p);
-        
-        // Display the transcription response area
-        document.getElementById('transcriptionResponse').classList.remove('hidden');
-    //}
+    // Poll for transcriptions if the button is clicked
+    pollForTranscription()
+    // Show the spinner
+    document.getElementById('spinner').classList.remove('hidden');
+    
 });
 
 $transcribeButton.onclick = () => {
@@ -122,6 +113,8 @@ const getTranscriptions = async () => {
             "event": "transcriptions",
         },
         (response) => {
+            // Hide the spinner
+            document.getElementById('spinner').classList.add('hidden');
             const transcriptionResponse = document.getElementById('transcriptionResponse');
             transcriptionResponse.innerHTML = '';
 
