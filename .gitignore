@@ -1,3 +1,5 @@
+.env
+
 # Extension
 extension/http_ca.crt
 extension/node_modules
