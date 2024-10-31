@@ -14,7 +14,6 @@ AUDIO_READY = False
 
 # Extension gets transcription json
 @app.route('/', methods=['GET'])
-@cross_origin
 def home():
     global TEXT
     return jsonify(TEXT)
