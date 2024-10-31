@@ -1,3 +1,11 @@
+/**
+ * 
+ * Function to start transcribing by calling the backend API
+ */
+async function StartTranscription() {
+    
+}
+
 const $helpButton = document.getElementById('helpButton');
 $helpButton.onclick = (e) => {
     // const isHidden = document.getElementById('helpText').style.display === 'none';
@@ -10,20 +18,11 @@ const $transcribeButton = document.getElementById("transcribe")
 
 // Listen to any clicking that happen to the button and if so, transcribe
 $transcribeButton.addEventListener("click", () => {
-    if (document.getElementById('transcriptionResponse').children.length === 0) {
-        p = document.createElement('p');
-        p.textContent = `Lorem ipsum odor amet, consectetuer adipiscing elit. 
-        Elementum tortor pretium sapien sodales turpis potenti morbi in placerat.
-        Dictum quisque mi est mi lobortis luctus finibus integer dui. Metus nullam tellus, 
-        efficitur fermentum nibh sagittis. Nunc nam et volutpat augue at laoreet luctus. 
-        Dignissim facilisis est placerat facilisi sem. In aliquet eget nibh elementum phasellus 
-        metus donec fusce.`;
-        // Add the <p> to the content area in the HTML page
-        document.getElementById('transcriptionResponse').appendChild(p);
-        
-        // Display the transcription response area
-        document.getElementById('transcriptionResponse').classList.remove('hidden');
-    }
+    // Poll for transcriptions if the button is clicked
+    pollForTranscription()
+    // Show the spinner
+    document.getElementById('spinner').classList.remove('hidden');
+    
 });
 
 $transcribeButton.onclick = () => {
@@ -114,6 +113,8 @@ const getTranscriptions = async () => {
             "event": "transcriptions",
         },
         (response) => {
+            // Hide the spinner
+            document.getElementById('spinner').classList.add('hidden');
             const transcriptionResponse = document.getElementById('transcriptionResponse');
             transcriptionResponse.innerHTML = '';
 
