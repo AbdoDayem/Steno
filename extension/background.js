@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener((data, sender, sendResponse) => {
                 sendResponse(data);
             })
     } else if (data.event === 'poll') {
-        // console.log('polling event triggered on background.js');
+        console.log('polling event triggered on background.js');
         pollStatus()
             .then(data => sendResponse(data));
     } else if (data.event = 'getText') {
