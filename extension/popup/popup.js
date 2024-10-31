@@ -73,13 +73,13 @@ const sendURL = async () => {
 };
 
 // Display the number of remaining files to be transcribed using the backend endpoint /status
-const remainingFiles = document.getElementById("files")
-fetch("http://localhost:5000/status")
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
-        remainingFiles.innerText = "Remaining Files = " + data
-    })
+// const remainingFiles = document.getElementById("files")
+// fetch("http://localhost:5000/status")
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data)
+//         remainingFiles.innerText = "Remaining Files = " + data
+//     })
 
 // Obtain the user's active tab
 // Creates and return a promise so that the URL is resolved prior to sending to the background script
@@ -105,7 +105,7 @@ const pollForTranscription = async () => {
         }
     );
 
-    // getTranscriptions();
+    // getTranscriptions()
 };
 
 const getTranscriptions = async () => {
