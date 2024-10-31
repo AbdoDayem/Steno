@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+# from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 import ast
 
 app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+# cors = CORS(app)
+CORS(app)
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 DATA = "Hello, world"
 N = 10
@@ -14,7 +16,7 @@ AUDIO_READY = False
 
 # Extension gets transcription json
 @app.route('/', methods=['GET'])
-@cross_origin
+# @cross_origin
 def home():
     global TEXT
     return jsonify(TEXT)
@@ -43,6 +45,7 @@ def receive_transcription():
 
 # Checks how many audios have been decoded so far
 @app.route('/status', methods=['GET'])
+# @cross_origin
 def audios_transcribed():
     global N
     return jsonify(N), 200
