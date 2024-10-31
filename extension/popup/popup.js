@@ -73,7 +73,7 @@ const sendURL = async () => {
 
 // Display the number of remaining files to be transcribed using the backend endpoint /status
 // const remainingFiles = document.getElementById("files")
-// fetch("http://localhost:5000/status")
+// fetch("http://localhost:5001/status")
 //     .then(response => response.json())
 //     .then(data => {
 //         console.log(data)
