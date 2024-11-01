@@ -28,7 +28,7 @@ max_headings_count: 5
 elasticsearch:
   host: https://es01
   port: 9200
-  api_key: UlkybDVKSUJrbndfSTBVenJPTEk6X25EMXBoV3VSMHFJbTRWN19mLTFadw== 
+  api_key: eFZ6TjVKSUJWNW5EVUhKYVBnc0M6Tmo2TVVjZmhUbzZPNFIxWnc4eEFodw== 
   ca_fingerprint: 0054665FC7705177917F09DCB84C3DF4326C10925B8C3C2607F42A9DE055A428 
   bulk_api:
     max_items: 10
