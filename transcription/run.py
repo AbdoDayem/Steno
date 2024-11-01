@@ -12,14 +12,14 @@ def add_audios():
             t.add_audio(f)
 
 def send_info(D):
-    r = requests.post('http://localhost:5001/transcribe',data=str(D))
+    r = requests.post('http://0.0.0.0:5001/transcribe',data=str(D))
 
 def main():
     #wait for audios to be ready
     ready = False
     while not ready:
         time.sleep(1)
-        r = requests.get('http://localhost:5001/audio')
+        r = requests.get('http://0.0.0.0:5001/audio')
         ready = r.content.decode("UTF-8") == 'True'
     #set path and setup
     t.set_path(PATH)
