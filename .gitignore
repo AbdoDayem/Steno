@@ -8,5 +8,6 @@ extension/Dockerfile
 
 # Global
 .venv
+venv
 
 __pycache__/

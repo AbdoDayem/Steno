@@ -14,16 +14,23 @@ TEXT = {}
 URL = ""
 AUDIO_READY = False
 
+# Utility function to print request origin
+def log_request_origin(request):
+    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    print(f"Request received from IP: {client_ip}")
+
 # Extension gets transcription json
 @app.route('/', methods=['GET'])
 # @cross_origin
 def home():
+    log_request_origin(request)
     global TEXT
     return jsonify(TEXT)
 
 # Communicates the URL
 @app.route('/url', methods=['POST', 'GET'])
 def url():
+    log_request_origin(request)
     global URL
 
     if request.method=='POST':
@@ -36,6 +43,7 @@ def url():
 # Transcription sends python dict of transcription
 @app.route('/transcribe', methods=['POST'])
 def receive_transcription():
+    log_request_origin(request)
     global TEXT
     global N
     N = N + 1
@@ -47,12 +55,14 @@ def receive_transcription():
 @app.route('/status', methods=['GET'])
 # @cross_origin
 def audios_transcribed():
+    log_request_origin(request)
     global N
     return jsonify(N), 200
 
 # Let's transcription know when folder has been populated with audio
 @app.route('/audio', methods=['GET', 'POST'])
 def ready():
+    log_request_origin(request)
     global AUDIO_READY
     if request.method=='POST':
         AUDIO_READY = True

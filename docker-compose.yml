@@ -84,6 +84,7 @@ services:
     volumes:
       - ./crawler/certs:/usr/share/elasticsearch/config/certs
       - ./crawler/config:/config
+      - ./crawler/config/steno_crawl.yml:/app/config/crawler.yml
     command: >
       -c " 
        echo 'Sleep to remain on standby'
@@ -93,14 +94,20 @@ services:
       api_key_creator:
         condition: service_completed_successfully
 
-  # python_process:
-  #   build:
-  #     #context: start.py
-  #     dockerfile: Dockerfile
-  #   image: python-process-image
-  #   container_name: python_process_container
-  #   networks:
-  #     - elastic
+  # The python file for running the crawler with the backend
+  crawler_service:
+    build:
+      context: ./crawler
+      dockerfile: Dockerfile
+    container_name: crawler-service-container
+    image: crawler-service-image
+    networks:
+      - elastic
+    depends_on:
+      - crawler
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket
 
   # Transcription
   transcription:
