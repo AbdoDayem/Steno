@@ -1,6 +1,6 @@
 import requests
 from elasticsearch import Elasticsearch
-from bs4 import BeautifulSoup
+from pprint import pprint
 
 def HtmlAcquisition(url: str):
 
@@ -8,17 +8,29 @@ def HtmlAcquisition(url: str):
     pageAccess = requests.get(url)
     pageHtml = pageAccess.text
     
+    htmlWrite = open("html.txt",'w',encoding=pageAccess.encoding)
+    htmlWrite.write(pageHtml)
+    htmlWrite.close()
+
     ElasticSearch(url, pageHtml)
 
 def ElasticSearch(url: str, html: str):
     
-
+    
     esClient = Elasticsearch("https://localhost:9200", ca_certs="certs/ca-cert.pem", basic_auth=("elastic", "Pk507wI0KzaZ"))
-    #print(esClient.info())
-    esClient.index(index='audiodownload', id=url, document={'content': html})
+    print(esClient.info())
+    esClient.index(index="audiodownload", id=url, document={"content": html})
 
-    esClient.search()
-
+    resp = esClient.search(index = "audiodownload",
+        query= {"match": 
+                {
+                    "content": "src"
+                }
+        }
+    )
+    elasticWrite = open('search.txt', 'w', encoding='utf8')
+    pprint(resp.body, stream=elasticWrite)
+    elasticWrite.close()
 
 def FileDownload(url: str, fileName: str):
     destination = 'AudioRip/'+ fileName
