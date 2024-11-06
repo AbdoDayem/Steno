@@ -1,6 +1,7 @@
 import requests
 from elasticsearch import Elasticsearch
 from pprint import pprint
+from bs4 import BeautifulSoup
 
 def HtmlAcquisition(url: str):
 
@@ -16,15 +17,28 @@ def HtmlAcquisition(url: str):
 
 def ElasticSearch(url: str, html: str):
     
+    parsedHtml = BeautifulSoup(html, features="html.parser")
+    tagDict = dict()
+    for tag in parsedHtml.find_all():
+        if not tag.name in tagDict.keys():
+            tagDict[tag.name] = [tag]
+        else:
+            tagDict[tag.name].append(tag)
+
+    parsingWrite = open('parsed.txt','w',encoding='utf8')
+    pprint(tagDict, stream=parsingWrite)
+    parsingWrite.close()
     
+
     esClient = Elasticsearch("https://localhost:9200", ca_certs="certs/ca-cert.pem", basic_auth=("elastic", "Pk507wI0KzaZ"))
-    print(esClient.info())
-    esClient.index(index="audiodownload", id=url, document={"content": html})
+    #print(esClient.info())
+    for tag, list in tagDict.items():
+        esClient.index(index="audiodownload", id=tag, document=list)
 
     resp = esClient.search(index = "audiodownload",
         query= {"match": 
                 {
-                    "content": "src"
+                    
                 }
         }
     )
