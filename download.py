@@ -13,7 +13,7 @@ import urllib.request
 #     basic_auth=("elastic", ELASTIC_PASSWORD)
 # )
 
-file = open('./html.txt', 'r')
+file = open('./html.txt', 'r',encoding='utf+8')
 doc_text = file.readlines()
 file.close()
 

@@ -17,38 +17,70 @@ def HtmlAcquisition(url: str):
 
 def ElasticSearch(url: str, html: str):
     
+    #parsing html into json for elasticsearch
     parsedHtml = BeautifulSoup(html, features="html.parser")
     tagDict = dict()
     for tag in parsedHtml.find_all():
-        if not tag.name in tagDict.keys():
-            tagDict[tag.name] = [tag]
+        if not str(tag.name) in tagDict.keys():
+            tagDict[str(tag.name)] = [str(tag)]
         else:
-            tagDict[tag.name].append(tag)
-
-    parsingWrite = open('parsed.txt','w',encoding='utf8')
-    pprint(tagDict, stream=parsingWrite)
-    parsingWrite.close()
+            tagDict[str(tag.name)].append(str(tag))
     
-
     esClient = Elasticsearch("https://localhost:9200", ca_certs="certs/ca-cert.pem", basic_auth=("elastic", "Pk507wI0KzaZ"))
     #print(esClient.info())
-    for tag, list in tagDict.items():
-        esClient.index(index="audiodownload", id=tag, document=list)
+    #places each tag in elasticsearch as a separate document
+    for tag, tagList in tagDict.items():
+        doc = {tag: tagList}
+        esClient.index(index="audiodownload", id=tag, document=doc)
 
+    #match for extensions
     resp = esClient.search(index = "audiodownload",
         query= {"match": 
                 {
-                    
+                    "audio": ".ogg"
                 }
         }
     )
-    elasticWrite = open('search.txt', 'w', encoding='utf8')
-    pprint(resp.body, stream=elasticWrite)
-    elasticWrite.close()
+    #isolates an audio tag containing src
+    audioTag = resp.body['hits']['hits'][0]['_source']['audio']
+    downloadTag = ''
+    for item in audioTag:
+        if item.__contains__('src') and downloadTag=='':
+            downloadTag = item
 
-def FileDownload(url: str, fileName: str):
-    destination = 'AudioRip/'+ fileName
-    print('not yet implemented')
+    audioTagFile = open('audiotags.txt','w',encoding='utf+8')
+    pprint(audioTag, stream=audioTagFile)
+    audioTagFile.close()
 
-testURL = 'https://en.wikipedia.org/wiki/File:01_-_Vivaldi_Spring_mvt_1_Allegro_-_John_Harrison_violin.ogg'
+    #isolates the src attribute
+    tagTokens = downloadTag.split()
+    srcAtt = ''
+    for token in tagTokens:
+        if token.__contains__('src') and srcAtt=='':
+            srcAtt = token
+    
+    #isolate src URL to download
+    downloadURL = srcAtt[5:-1]
+    if not downloadURL.__contains__('https:'):
+        downloadURL= 'https:' + downloadURL
+    FileDownload(downloadURL)
+
+    #clear index
+    esClient.indices.delete(index='audiodownload')
+
+def FileDownload(url: str):
+    lastDotIndex = 0
+    print('\n\n'+url)
+    for i in range(url.__len__()):
+        if url[i]=='.':
+            lastDotIndex = i
+    extension = url[lastDotIndex:lastDotIndex+4]
+    destination = 'media/FileForTranscription'+extension
+
+    response = requests.get(url)
+    fileOut = open(destination, 'wb') 
+    fileOut.write(response.content)
+    fileOut.close()
+
+testURL = 'https://en.wikipedia.org/wiki/File:En-Tower_of_London-article.ogg'
 HtmlAcquisition(testURL)
