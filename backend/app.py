@@ -9,7 +9,7 @@ CORS(app)
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
 DATA = "Hello, world"
-N = 10
+N = 0
 TEXT = {}
 URL = ""
 AUDIO_READY = False
@@ -42,6 +42,9 @@ def receive_transcription():
     data = request.data
     dict_str = data.decode("UTF-8")
     TEXT = ast.literal_eval(dict_str)
+    transcription_text = TEXT.get('audiofile.mp3', None)
+    print(transcription_text, flush=True)
+    return jsonify(TEXT), 200
 
 # Checks how many audios have been decoded so far
 @app.route('/status', methods=['GET'])
@@ -56,8 +59,7 @@ def ready():
     global AUDIO_READY
     if request.method=='POST':
         AUDIO_READY = True
-    else:
-        return jsonify(AUDIO_READY), 200
+    return jsonify(AUDIO_READY), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001, host="0.0.0.0")

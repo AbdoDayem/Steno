@@ -73,13 +73,19 @@ const pollStatus = async () => {
     let status = 0;
 
     while (status < 1) {
+        console.log('status:' + status);
+        console.log('polling /status on background.js');
         const resp = await fetch(BACKEND_URL + '/status', OPTIONS)
             .then(res => {
                 // console.log('res in /status fetch on background.js');
                 // console.log(res);
                 return res.json()
             });
+        console.log('resp from /status in background.js: ' + status);
         status = parseInt(resp.status);
+        setTimeout(() => {
+            console.log('polling /status again');
+        }, 5000);
     }
 
     return 'TEMP: done polling'

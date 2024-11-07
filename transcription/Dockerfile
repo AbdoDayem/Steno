@@ -1,5 +1,11 @@
 FROM python:3.10.12
-COPY requirements.txt .
+# Install ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg
+
+ADD requirements.txt .
 RUN pip install -r requirements.txt
-COPY run.py .
+
+ADD run.py .
+ADD transcribe.py .
+
 CMD ["python", "run.py"]

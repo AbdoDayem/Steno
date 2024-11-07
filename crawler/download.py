@@ -2,6 +2,7 @@ import datetime
 import pprint
 from elasticsearch import Elasticsearch
 import urllib.request
+import requests
 
 # Create the client instance
 # ELASTIC_PASSWORD = "TCG_7GzN6ZFKej4Fut-m"
@@ -27,7 +28,10 @@ source = sources[0].replace('src=', '').replace('\"', '')
 
 if 'https' not in source: source = 'https:' + source
 
-urllib.request.urlretrieve(source, "./audio/audiofile.mp3")
+urllib.request.urlretrieve(source, "./app/shared/audiofile.mp3")
+
+# Post to backend that the audio is ready
+r = requests.post('http://backend:5001/audio')
 
 
 # doc = {
