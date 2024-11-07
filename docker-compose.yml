@@ -108,6 +108,8 @@ services:
       - backend
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket
+      - ./audio/audiofile.mp3:app/shared/audiofile.mp3  # Mount audio file
+      - shared-storage:/app/shared
 
   # Transcription
   transcription:
@@ -120,6 +122,8 @@ services:
       - elastic
     depends_on:
       - backend
+    volumes:
+      - shared-storage:/app/shared
 
   # Backend
   backend:
@@ -137,3 +141,6 @@ networks:
   elastic:
     # Used to connect between elasticsearch and crawler
     driver: bridge
+
+volumes:
+  shared-storage:

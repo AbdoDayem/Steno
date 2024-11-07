@@ -7,7 +7,7 @@ domains:
     seed_urls: [https://en.wikipedia.org/wiki/File:01_-_Vivaldi_Spring_mvt_1_Allegro_-_John_Harrison_violin.ogg]
     
 # Where to send the results. Possible values are console, file, or elasticsearch
-output_sink: elasticsearch
+output_sink: console
 
 # Elasticsearch index name to ingest crawl results into. Required if output_sink is elasticsearch
 output_index: crawl-index 

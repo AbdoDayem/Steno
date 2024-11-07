@@ -27,7 +27,7 @@ source = sources[0].replace('src=', '').replace('\"', '')
 
 if 'https' not in source: source = 'https:' + source
 
-urllib.request.urlretrieve(source, "../audio/audiofile.mp3")
+urllib.request.urlretrieve(source, "./audio/audiofile.mp3")
 
 
 # doc = {
