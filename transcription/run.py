@@ -36,7 +36,7 @@ def main():
         print('more_audios: ', more_audios)
         if more_audios:
             output_dict = output_dict | d
-            send_info(output_dict)
+            # send_info(output_dict)
     send_info(output_dict)
 
 if __name__ == "__main__":

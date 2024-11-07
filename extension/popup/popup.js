@@ -118,9 +118,9 @@ const getTranscriptions = async () => {
             const transcriptionResponse = document.getElementById('transcriptionResponse');
             transcriptionResponse.innerHTML = '';
 
-            // console.log('response from getTranscriptions on popup.js');
-            // console.log(typeof response);
-            // console.log(response);
+            console.log('response from getTranscriptions on popup.js');
+            console.log(typeof response);
+            console.log(response);
 
             // response should be an object of key-value pairs, where the values are the text i want to display to the user
             Object.keys(response).forEach(key => {
@@ -129,6 +129,8 @@ const getTranscriptions = async () => {
 
                 transcriptionResponse.appendChild(p);
             });
+
+            transcriptionResponse.classList.remove('hidden');
             // response.forEach(transcription => {
             //     p = document.createElement('p');
             //     p.textContent = transcription;

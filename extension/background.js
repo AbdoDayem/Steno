@@ -92,7 +92,7 @@ const pollStatus = async () => {
 };
 
 // Query the backend for text
-const getText = () => {
+const getText = async () => {
     const OPTIONS = {
         method: 'GET',
         headers: {
@@ -100,8 +100,11 @@ const getText = () => {
         }
     }
 
-    const resp = fetch(BACKEND_URL + '/', OPTIONS)
+    const resp = await fetch(BACKEND_URL + '/', OPTIONS)
         .then(res => res.json());
+
+    console.log('resp from / in getText');
+    console.log(resp);
 
     return resp;
 };

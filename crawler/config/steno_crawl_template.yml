@@ -2,9 +2,10 @@
 # API_KEY variable will be replaced on startup
 
 # Domains allowed for the crawl
+# TAG: TODO
 domains:
   - url: https://en.wikipedia.org
-    seed_urls: [https://en.wikipedia.org/wiki/File:01_-_Vivaldi_Spring_mvt_1_Allegro_-_John_Harrison_violin.ogg]
+    seed_urls: [https://en.wikipedia.org/wiki/File:Spoken_Wikipedia_-_One_Times_Square.ogg]
     
 # Where to send the results. Possible values are console, file, or elasticsearch
 output_sink: console
