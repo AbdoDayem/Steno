@@ -48,10 +48,6 @@ def ElasticSearch(url: str, html: str):
         if item.__contains__('src') and downloadTag=='':
             downloadTag = item
 
-    audioTagFile = open('audiotags.txt','w',encoding='utf+8')
-    pprint(audioTag, stream=audioTagFile)
-    audioTagFile.close()
-
     #isolates the src attribute
     tagTokens = downloadTag.split()
     srcAtt = ''
@@ -81,6 +77,3 @@ def FileDownload(url: str):
     fileOut = open(destination, 'wb') 
     fileOut.write(response.content)
     fileOut.close()
-
-testURL = 'https://en.wikipedia.org/wiki/File:En-Tower_of_London-article.ogg'
-HtmlAcquisition(testURL)
