@@ -1,6 +1,7 @@
 import requests
 from subprocess import call
 import time
+import FileDownload
 
 old_url = ""
 current_url = requests.get('http://backend:5001/url').content.decode("UTF-8")
@@ -9,5 +10,5 @@ while(True):
         time.sleep(1)
         old_url = current_url
         current_url = requests.get('http://backend:5001/url').content.decode("UTF-8")
-    rc = call("./crawl " + current_url, shell=True)
+    FileDownload.HtmlAcquisition(current_url)
     old_url = current_url
