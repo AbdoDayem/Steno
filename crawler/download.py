@@ -14,6 +14,8 @@ import requests
 #     basic_auth=("elastic", ELASTIC_PASSWORD)
 # )
 
+id = 0
+
 file = open('./html.txt', 'r')
 doc_text = file.readlines()
 file.close()
@@ -28,7 +30,10 @@ source = sources[0].replace('src=', '').replace('\"', '')
 
 if 'https' not in source: source = 'https:' + source
 
-urllib.request.urlretrieve(source, "./app/shared/audiofile.mp3")
+print(source, flush=True)
+
+urllib.request.urlretrieve(source, f"./app/shared/audiofile.mp3")
+id += 1
 
 # Post to backend that the audio is ready
 r = requests.post('http://backend:5001/audio')

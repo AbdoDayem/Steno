@@ -1,25 +1,13 @@
-// let data = {
-//     "event": "",
-//     "prefs": {
-//         // KEYS WE DEFINE OURSELVES
-//         "varX": "x",
-//         "varY": "y",
-//         "varZ": "z"
-//     }
-// }
-
 const BACKEND_URL = 'http://0.0.0.0:5001'
+let status = 0;
 
 chrome.runtime.onMessage.addListener((data, sender, sendResponse) => {
     if (data.event === 'transcribe') {
         const numberOfTranscriptions = startTranscription(data.prefs)
             .then(data => {
-                // console.log('data returned from startTranscription');
-                // console.log(data);
                 sendResponse(data);
             })
     } else if (data.event === 'poll') {
-        console.log('polling event triggered on background.js');
         pollStatus()
             .then(data => sendResponse(data));
     } else if (data.event = 'getText') {
@@ -45,23 +33,12 @@ const startTranscription = async (data) => {
                 console.error('Error: Failed to send URL to backend');
             }
 
-            // console.log('res from /url on background.js');
-            // console.log(res);
-
             return res.json();
         });
 
     return resp;
 };
 
-// Poll '/status' on the backend to figure out if the number of texts has changed
-    // Define a variable to record how many texts we currently have
-    // Set up an long-running poll to query the backend
-        // It updates the number. When the number changes, we query for text
-    // Once the number we have == the number we are expecting, we end
-
-// FOR FIRST PROTOTYPE:
-    // Assume we are expecting 1 text
 const pollStatus = async () => {
     const OPTIONS = {
         method: 'GET',
@@ -70,25 +47,25 @@ const pollStatus = async () => {
         }
     }
 
-    let status = 0;
+    let newStatus = status;
 
-    while (status < 1) {
-        console.log('status:' + status);
-        console.log('polling /status on background.js');
+    while (newStatus == status) {
         const resp = await fetch(BACKEND_URL + '/status', OPTIONS)
             .then(res => {
-                // console.log('res in /status fetch on background.js');
-                // console.log(res);
                 return res.json()
             });
-        console.log('resp from /status in background.js: ' + status);
-        status = parseInt(resp.status);
-        setTimeout(() => {
-            console.log('polling /status again');
-        }, 5000);
+
+        newStatus = parseInt(resp);
+        await delay();
     }
 
-    return 'TEMP: done polling'
+    status = newStatus;
+
+    return status;
+};
+
+const delay = () => {
+    return new Promise(resolve => setTimeout(resolve, 5000));
 };
 
 // Query the backend for text
@@ -102,9 +79,6 @@ const getText = async () => {
 
     const resp = await fetch(BACKEND_URL + '/', OPTIONS)
         .then(res => res.json());
-
-    console.log('resp from / in getText');
-    console.log(resp);
 
     return resp;
 };

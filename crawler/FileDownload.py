@@ -27,7 +27,7 @@ def ElasticSearch(url: str, html: str):
         else:
             tagDict[str(tag.name)].append(str(tag))
     
-    esClient = Elasticsearch("https://localhost:9200", ca_certs="certs/ca-cert.pem", basic_auth=("elastic", "Pk507wI0KzaZ"))
+    esClient = Elasticsearch("https://elasticsearch:9200", ca_certs="/usr/share/elasticsearch/config/certs/ca-cert.pem", basic_auth=("elastic", "Pk507wI0KzaZ"), verify_certs=False)
     #print(esClient.info())
     #places each tag in elasticsearch as a separate document
     for tag, tagList in tagDict.items():

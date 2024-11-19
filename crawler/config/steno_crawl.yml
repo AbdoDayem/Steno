@@ -2,6 +2,7 @@
 # API_KEY variable will be replaced on startup
 
 # Domains allowed for the crawl
+# TAG: TODO
 domains:
   - url: https://en.wikipedia.org
     seed_urls: [https://en.wikipedia.org/wiki/File:Spoken_Wikipedia_-_One_Times_Square.ogg]
@@ -28,7 +29,7 @@ max_headings_count: 5
 elasticsearch:
   host: https://es01
   port: 9200
-  api_key: ZHBvTkNKTUJOaDFxWlc2R3ZmS0g6Z3BOVzJmRDJTcnFkTzN2WWZXclJPZw== 
+  api_key: UUNRa1JwTUJpTGRqUDFNOGRlc3U6RHVtai1jNG5STUt6LTRvNmxvMHd6QQ== 
   ca_fingerprint: 0054665FC7705177917F09DCB84C3DF4326C10925B8C3C2607F42A9DE055A428 
   bulk_api:
     max_items: 10

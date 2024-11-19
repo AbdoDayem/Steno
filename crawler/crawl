@@ -2,6 +2,7 @@
 
 # Change to your config path
 CONFIG_PATH=./config/steno_crawl.yml
+# TAG: ^ this needs to be in the dockerfile
 
 SEED_URL=$1
 if [[ "$SEED_URL" =~ ^https?://([^/]+) ]]; then
@@ -23,6 +24,7 @@ REPLACE_SEED="    seed_urls: [$SEED_URL]"
 sed -i -e "s@$SEARCH_URL@$REPLACE_URL@g" $CONFIG_PATH
 sed -i -e "s@$SEARCH_SEED@$REPLACE_SEED@g" $CONFIG_PATH
 
+docker cp $CONFIG_PATH crawler:app/config/crawler.yml
 docker exec -i crawler bin/crawler crawl config/crawler.yml > html.txt
 
 python3 ./download.py

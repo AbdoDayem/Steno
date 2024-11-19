@@ -84,7 +84,6 @@ services:
     volumes:
       - ./crawler/certs:/usr/share/elasticsearch/config/certs
       - ./crawler/config:/config
-      - ./crawler/config/steno_crawl.yml:/app/config/crawler.yml
     command: >
       -c " 
        echo 'Sleep to remain on standby'
@@ -110,6 +109,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket
       - ./audio:/app/shared/ # Mount audio file
       - shared-storage:/app/shared
+      - ./crawler/certs:/usr/share/elasticsearch/config/certs
 
   # Transcription
   transcription:
