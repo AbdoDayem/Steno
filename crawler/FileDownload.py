@@ -81,4 +81,5 @@ def FileDownload(url: str):
     fileOut.close()
 
 def FileDownload2(url: str):
-    urllib.request.urlretrieve(url, "./media/audiofile.mp3")
+    urllib.request.urlretrieve(url, "./app/shared/audiofile.mp3")
+    r = requests.post('http://backend:5001/audio')
