@@ -2,6 +2,7 @@ import requests
 from elasticsearch import Elasticsearch
 from pprint import pprint
 from bs4 import BeautifulSoup
+import urllib
 
 def HtmlAcquisition(url: str):
 
@@ -59,7 +60,8 @@ def ElasticSearch(url: str, html: str):
     downloadURL = srcAtt[5:-1]
     if not downloadURL.__contains__('https:'):
         downloadURL= 'https:' + downloadURL
-    FileDownload(downloadURL)
+    
+    FileDownload2(downloadURL)
 
     #clear index
     esClient.indices.delete(index='audiodownload')
@@ -77,3 +79,6 @@ def FileDownload(url: str):
     fileOut = open(destination, 'wb') 
     fileOut.write(response.content)
     fileOut.close()
+
+def FileDownload2(url: str):
+    urllib.request.urlretrieve(url, "./media/audiofile.mp3")

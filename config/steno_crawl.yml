@@ -7,7 +7,7 @@ domains:
     seed_urls: [https://en.wikipedia.org/wiki/File:01_-_Vivaldi_Spring_mvt_1_Allegro_-_John_Harrison_violin.ogg]
     
 # Where to send the results. Possible values are console, file, or elasticsearch
-output_sink: console
+output_sink: elasticsearch
 
 # Elasticsearch index name to ingest crawl results into. Required if output_sink is elasticsearch
 output_index: crawl-index 
@@ -28,12 +28,8 @@ max_headings_count: 5
 elasticsearch:
   host: https://es01
   port: 9200
-  api_key: VFl2b2xaSUJSYUlmUWJKMV9aY0M6WEhaZ3l4dXhTM1M0NnFrbHhCUDlxdw== 
+  api_key: VjRmeVJaTUJILWgwbHFPa0Vzb1I6TkhhWDFhc0xTQkdtVXFOZ0lkLVd3Zw== 
   ca_fingerprint: 0054665FC7705177917F09DCB84C3DF4326C10925B8C3C2607F42A9DE055A428 
-  pipeline: null-pipeline
-  pipeline_params._extract_binary_content: false
-  pipeline_params._run_ml_inference: false
-  pipeline_params._reduce_whitespace: false
   bulk_api:
     max_items: 10
     max_size_bytes: 1_048_576
