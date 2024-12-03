@@ -1,6 +1,5 @@
 import requests
 from elasticsearch import Elasticsearch
-from pprint import pprint
 from bs4 import BeautifulSoup
 import urllib
 
@@ -17,6 +16,8 @@ def HtmlAcquisition(url: str):
     ElasticSearch(url, pageHtml)
 
 def ElasticSearch(url: str, html: str):
+    audioExtensionSet={".mp3",".ogg",".m4a",".flac",".wav"}
+    videoExtensionSet={".mp4",".ogg",".wmv",".mov"}
     
     #parsing html into json for elasticsearch
     parsedHtml = BeautifulSoup(html, features="html.parser")
@@ -32,53 +33,91 @@ def ElasticSearch(url: str, html: str):
     #places each tag in elasticsearch as a separate document
     for tag, tagList in tagDict.items():
         doc = {tag: tagList}
-        esClient.index(index="audiodownload", id=tag, document=doc)
+        esClient.index(index="sourcedownload", id=tag, document=doc)
 
     #match for extensions
-    resp = esClient.search(index = "audiodownload",
-        query= {"match": 
-                {
-                    "audio": ".ogg"
-                }
-        }
-    )
-    #isolates an audio tag containing src
-    audioTag = resp.body['hits']['hits'][0]['_source']['audio']
-    downloadTag = ''
-    for item in audioTag:
-        if item.__contains__('src') and downloadTag=='':
-            downloadTag = item
+    downloadCollection = set()
+    while(audioExtensionSet.__len__() != 0):
+        extension = audioExtensionSet.pop()
+        resp = esClient.search(index = "sourcedownload",
+            query= {"match": 
+                    {
+                        "audio": extension,
+                    }
+            }
+        )
+        #isolates an audio tag containing src
+        if(resp.body['hits']['hits'].__len__() != 0):
+            audioTag = resp.body['hits']['hits'][0]['_source']['audio']
+            downloadTag = ''
+            for item in audioTag:
+                if item.__contains__('src') and downloadTag=='':
+                    downloadTag = item
 
-    #isolates the src attribute
-    tagTokens = downloadTag.split()
-    srcAtt = ''
-    for token in tagTokens:
-        if token.__contains__('src') and srcAtt=='':
-            srcAtt = token
+            #isolates the src attribute
+            tagTokens = downloadTag.split()
+            srcAtt = ''
+            for token in tagTokens:
+                if token.__contains__('src') and srcAtt=='':
+                    srcAtt = token
+            
+            #isolate src URL to download
+            downloadURL = srcAtt[5:-1]
+            if not downloadURL.__contains__('https:'):
+                downloadURL= 'https:' + downloadURL
+            downloadCollection.add(downloadURL)
     
-    #isolate src URL to download
-    downloadURL = srcAtt[5:-1]
-    if not downloadURL.__contains__('https:'):
-        downloadURL= 'https:' + downloadURL
+    while(videoExtensionSet.__len__() != 0):
+        extension = videoExtensionSet.pop()
+        resp = esClient.search(index = "sourcedownload",
+            query= {"match": 
+                    {
+                        "video": extension,
+                    }
+            }
+        )
+        #isolates an audio tag containing src
+        if(resp.body['hits']['hits'].__len__() != 0):
+            videoTag = resp.body['hits']['hits'][0]['_source']['video']
+            downloadTag = ''
+            for item in videoTag:
+                if item.__contains__('src') and downloadTag=='':
+                    downloadTag = item
+
+            #isolates the src attribute
+            tagTokens = downloadTag.split()
+            srcAtt = ''
+            for token in tagTokens:
+                if token.__contains__('src') and srcAtt=='':
+                    srcAtt = token
+            
+            #isolate src URL to download
+            downloadURL = srcAtt[5:-1]
+            if not downloadURL.__contains__('https:'):
+                downloadURL= 'https:' + downloadURL
+            downloadCollection.add(downloadURL)
     
-    FileDownload2(downloadURL)
+    
+    FileDownload(downloadCollection)
 
     #clear index
-    esClient.indices.delete(index='audiodownload')
+    
+    esClient.indices.delete(index='sourcedownload')
 
-def FileDownload(url: str):
-    lastDotIndex = 0
-    print('\n\n'+url)
-    for i in range(url.__len__()):
-        if url[i]=='.':
-            lastDotIndex = i
-    extension = url[lastDotIndex:lastDotIndex+4]
-    destination = 'media/FileForTranscription'+extension
+def FileDownload(urls: set):
+    extractedFiles = set()
+    while(urls.__len__() != 0):
+        url = urls.pop()
+        lastDotIndex = 0
+        print('\n\n'+url)
+        for i in range(url.__len__()):
+            if url[i]=='.':
+                lastDotIndex = i
+        file = url[:lastDotIndex]
+        if(not extractedFiles.__contains__(file)):
+            extractedFiles.add(file)
+            #extension = url[lastDotIndex:lastDotIndex+4]
+            destination = 'media/audiofile.mp3'
 
-    response = requests.get(url)
-    fileOut = open(destination, 'wb') 
-    fileOut.write(response.content)
-    fileOut.close()
+            urllib.request.urlretrieve(url, destination)
 
-def FileDownload2(url: str):
-    urllib.request.urlretrieve(url, "./media/audiofile.mp3")
